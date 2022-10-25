@@ -1,6 +1,6 @@
 # CloudFaster Academy: Demonstração de utilização da API Gateway + Lambda + DynamoDB
 
-> **Autor:** [CloudFaster Tecnologia](https://cloudfaster.com.br), **Última revisão:** 24/10/2022
+> **Autor:** [CloudFaster Tecnologia](https://cloudfaster.com.br), **Última revisão:** 25/10/2022
 
 Neste tutorial iremos te ajudar a criar uma função Lambda que será vinculada a uma Api Gateway para receber dados e grava-los no DynamoDB.
 
@@ -11,7 +11,7 @@ Neste tutorial iremos te ajudar a criar uma função Lambda que será vinculada 
 
 ## Passo 1: Criar uma Role do IAM
 
-Após acessar sua conta AWS, navegue até o serviço "IAM Roles" ou acesse diretamente por esse link: <https://console.aws.amazon.com/iamv2/#/roles>\
+Após acessar sua conta AWS, navegue até o serviço "IAM Roles" ou acesse diretamente por esse link: <https://console.aws.amazon.com/iamv2/#/roles>
 
 Na tela do serviço, será listada todas as roles disponíveis e teremos um botão *"Create role"*. Clique nele.\
 ![IAM Role 01](./assets/iam-role-01.png)
@@ -19,7 +19,7 @@ Na tela do serviço, será listada todas as roles disponíveis e teremos um bot�
 Na tela de criação de nova Role, selecione o tipo de entidade confiável *"AWS service"*, selecione o caso de uso *"Lambda"* e clique em *"Next"*.\
 ![IAM Role 02](./assets/iam-role-02.png)
 
-Será solicitada quais permissões (policies) você deseja adicionar, procure e selecione *"AWSLambdaBasicExecutionRole"* e *"AmazonDynamoDBFullAccess"* em seguida, clique em *"Next"*.\
+Será solicitada quais permissões (policies) você deseja adicionar, procure e selecione *"AWSLambdaBasicExecutionRole"* e *"AmazonDynamoDBFullAccess"* em seguida, clique em *"Next"*.
 
 > **Atenção:** Não é aconselhavel utilizar uma IAM Policy de Full Access. Seguindo as boas práticas de segurança, é sempre recomendável utilizar permissões granulares com o menor privilégio. Utilizaremos essa IAM Policy apenas para fins didáticos.
 
@@ -32,7 +32,7 @@ Pronto sua IAM Role, está criada e pronta para ser anexada à sua função Lamb
 
 ## Passo 2: Criar a tabela no DynamoDB
 
-Essa tabela será necessária para armazenar os dados da nossa aplicação, não aprofundaremos em conceitos NoSQL, utilizaremos apenas para fins didáticos.\
+Essa tabela será necessária para armazenar os dados da nossa aplicação, não aprofundaremos em conceitos NoSQL, utilizaremos apenas para fins didáticos.
 
 Após acessar sua conta AWS, navegue até o serviço "DynamoDB" ou acesse diretamente por esse link: <https://console.aws.amazon.com/dynamodbv2/#tables>\
 No dashboard do serviço, procure pelo botão *"Create table"* e clique.\
@@ -43,21 +43,29 @@ Na tela de criação da tabela, dê um nome para nossa tabela, para fins de exem
 
 ## Passo 3: Criar a função Lambda
 
-Após acessar sua conta AWS, navegue até o serviço "Lambda" ou acesse diretamente por esse link: <https://console.aws.amazon.com/lambda>\
+Após acessar sua conta AWS, navegue até o serviço "Lambda" ou acesse diretamente por esse link: <https://console.aws.amazon.com/lambda>
 
 Na tela do serviço será listado todas as funções lambdas disponíveis para a região selecionada e teremos um botão *"Create Function"* no canto superiror direito da listagem. Clique nele.\
 ![Lambda 01](./assets/tela_01.png)
 
-Na tela seguinte, mantenha a opção *"Author from scratch"* selecionada, informe um nome para sua função, escolha um *Runtime* e a arquitetura que você quer que seu código seja executado, para esse exemplo utilizaremos Python 3.9 em uma arquitetura x86_64.\
+Na tela seguinte, mantenha a opção *"Author from scratch"* selecionada, informe um nome para sua função, para nosso exemplo utilizarei `lambda-save-dynamodb`, em seguida escolha um *Runtime* e a arquitetura que você quer que seu código seja executado, para esse exemplo utilizaremos Python 3.9 em uma arquitetura x86_64.\
 ![Lambda 02](./assets/tela_02.png)
 
 Role a tela um pouco para baixo e abra as opões presentes em *"Change default execution role"*, marque a opção *"Use an existing role"* e no campo *"Existing role"* selecione a Role IAM criada no passo 1, em seguida, clique em *"Create Function"*.\
 ![Lambda 03](./assets/tela_03.png)
 
-Sua função Lamda será criada e será possível editar o código diretamente no *Browser*. Apague o conteúdo do arquivo "lambda_function.py" aberto no editor de código da função Lambda, copie todo o conteúdo do arquivo `lambda-save-dynamodb.py` disponível neste repositório, e cole no editor de código da função lambda. Em seguida substitua as variáveis `DYNAMODB_TABLE` e `AWS_REGION` com os valores corretos para sua tabela do DynamoDB criado no passo 2. Ao finalizar clique em *"Deploy"*.\
+Sua função Lambda será criada e será possível editar o código diretamente no *Browser*.\
+\
+Apague o conteúdo do arquivo "lambda_function.py" aberto no editor de código da função Lambda, copie todo o conteúdo do arquivo [`lambda-save-dynamodb.py`](https://github.com/cloudfaster-academy-workshop/demo-lambda-dynamodb/blob/main/lambda-save-dynamodb.py), disponível neste repositório, e cole no editor de código da função Lambda.\
+\
+Em seguida, substitua as variáveis `DYNAMODB_TABLE` e `AWS_REGION` (linhas 12 e 14 do código) com os valores corretos para sua tabela do DynamoDB criado no passo 2.\
+\
+Ao finalizar clique em *"Deploy"*.\
 ![Lambda 04](./assets/tela_04.png)
 
-Agora iremos testar nossa nova função Lambda, clique em *"Test"*. Será aberta uma tela de configuração do evento, nele iremos informar um nome para nosso teste e o JSON que será recebido como evento. Utilize o seguinte JSON para fins de teste.
+Agora iremos testar nossa nova função Lambda, clique em *"Test"*. Será aberta uma tela de configuração do evento, nele iremos informar um nome para nosso teste e o JSON que será recebido como evento. Utilize o JSON abaixo para fins de teste.\
+\
+Ao finalizar, clique em *"Save"*.
 
 ```json
 {
@@ -68,13 +76,14 @@ Agora iremos testar nossa nova função Lambda, clique em *"Test"*. Será aberta
 }
 ```
 
-Ao finalizar, clique em *"Save"*\
 ![Lambda 05](./assets/tela_05.png)
 
-Assim que o novo evento de teste for criado, você poderá rodar sua função Lambda para teste, basta clicar na seta no botão *"Test"*. Tudo ocorrendo bem você verá uma mensagem de sucesso, conforme imagem abaixo:\
+Assim que o novo evento de teste for criado, você poderá rodar sua função Lambda para teste, basta clicar no botão *"Test"* novamente.\
+\
+Tudo ocorrendo bem você verá uma mensagem de sucesso, conforme imagem abaixo:\
 ![Lambda 06](./assets/tela_06.png)
 
-Você pode verificar se tudo ocorreu bem acessando a tabela do DynamoDB e verificando se o dado foi adicionado corretamente.\
+Você pode verificar se tudo ocorreu bem acessando a tabela do DynamoDB, através do seguinte link <https://console.aws.amazon.com/dynamodbv2/>, acessando o menu *"Explore items"* e selecionando a tabela recém criada, lá você poderá visualizar se o dado foi adicionado corretamente.\
 ![Lambda 07](./assets/tela_07.png)
 
 ## Passo 4: Criar o vinculo do Lambda com a API Gateway
