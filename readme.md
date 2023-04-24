@@ -41,7 +41,7 @@ Dê um nome para sua Role, para fins de exemplo utilizarei "role-lambda-access-d
 ![IAM Role 04](./assets/iam-role-04.png)
 \
 \
-Pronto sua IAM Role, está criada e pronta para ser anexada à sua função Lambda, podemos seguir para o passo 2.
+Pronto, sua IAM Role está criada e pronta para ser anexada à sua função Lambda, podemos seguir para o passo 2.
 
 ## Passo 2: Criar a tabela no DynamoDB
 
